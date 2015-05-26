@@ -19,6 +19,7 @@ $vm_memory = 1024
 $vm_cpus = 1
 $shared_folders = {}
 $forwarded_ports = {}
+$use_private_network = true
 
 # Attempt to apply the deprecated environment variable NUM_INSTANCES to
 # $num_instances while allowing config.rb to override it
@@ -117,8 +118,10 @@ Vagrant.configure("2") do |config|
         vb.cpus = vm_cpus
       end
 
-      ip = "172.17.8.#{i+100}"
-      config.vm.network :private_network, ip: ip
+      if $use_private_network
+        ip = "172.17.8.#{i+100}"
+        config.vm.network :private_network, ip: ip
+      end
 
       # Uncomment below to enable NFS for sharing the host machine into the coreos-vagrant VM.
       #config.vm.synced_folder ".", "/home/core/share", id: "core", :nfs => true, :mount_options => ['nolock,vers=3,udp']
